@@ -2,7 +2,7 @@ import matplotlib
 import numpy as np
 import pytest
 
-from auv_optimizer import AUVOptimizer
+from auv_optimizer import AUVOptimizer, plot_schedule, plot_solution_schedule
 
 matplotlib.use("Agg")
 
@@ -67,3 +67,19 @@ def test_visualization_returns_figure():
     assert optimizer.solve() is not None
     figure = optimizer.visualize_solution()
     assert figure is not None
+
+
+def test_schedule_visualization_returns_figure():
+    optimizer = make_feasible_optimizer()
+    solution = optimizer.solve()
+    assert solution is not None
+    figure = plot_solution_schedule(solution, num_auvs=optimizer.num_auvs)
+    assert figure is not None
+    assert len(figure.axes[0].patches) == optimizer.num_tasks
+
+
+def test_schedule_visualization_rejects_invalid_times():
+    with pytest.raises(ValueError, match="start_time"):
+        plot_schedule(
+            [{"auv_id": 0, "task_id": 0, "start_time": 2.0, "end_time": 1.0}]
+        )
