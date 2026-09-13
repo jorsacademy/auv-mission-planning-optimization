@@ -23,6 +23,7 @@ Travel time is vehicle-specific and incorporates a simplified directional ocean-
 - time sequencing doubles as subtour elimination for positive-duration routes;
 - data-derived Big-M instead of a fixed arbitrary value;
 - decision variables retained directly rather than reconstructed from PuLP variable-name strings;
+- 3D route visualization plus a separate Gantt-style temporal schedule view;
 - package structure, automated tests, linting, and GitHub Actions CI.
 
 ## Installation
@@ -31,14 +32,14 @@ Requires Python 3.10+ and PuLP's CBC solver support.
 
 ```bash
 python -m venv .venv
-source .venv/bin/activate  # Windows: .venv\Scripts\activate
+source .venv/bin/activate  # Windows: .venv\Scripts\Activate.ps1
 pip install -e ".[dev]"
 ```
 
 ## Basic usage
 
 ```python
-from auv_optimizer import AUVOptimizer
+from auv_optimizer import AUVOptimizer, plot_solution_schedule
 
 optimizer = AUVOptimizer(num_auvs=4, num_tasks=15, seed=42)
 optimizer.build_optimization_model()
@@ -46,11 +47,28 @@ solution = optimizer.solve(msg=True)
 
 if solution is not None:
     optimizer.print_solution_summary()
-    figure = optimizer.visualize_solution()
-    figure.show()
+
+    route_figure = optimizer.visualize_solution()
+    route_figure.show()
+
+    schedule_figure = plot_solution_schedule(solution, num_auvs=optimizer.num_auvs)
+    schedule_figure.show()
 ```
 
 Synthetic instances can occasionally contain a task for which no generated AUV is compatible. In that case the optimizer raises a `ValueError` before constructing an infeasible MILP. For controlled experiments, provide or modify fleet/task data before building the model.
+
+## Schedule visualization
+
+The optimization result already contains task start/end times. `plot_solution_schedule` converts those solved assignments into a Gantt-style timeline, one row per AUV, without coupling plotting logic back into the MILP implementation.
+
+This makes the temporal structure inspectable in addition to the 3D route geometry:
+
+```text
+route view    -> where each AUV travels
+schedule view -> when each assigned task is executed
+```
+
+The lower-level `plot_schedule(assignments, num_auvs=...)` helper can also be used with compatible external solution data.
 
 ## Objective
 
@@ -71,7 +89,7 @@ pytest --cov=auv_optimizer --cov-report=term-missing
 ruff check .
 ```
 
-The test suite checks deterministic data generation, vehicle-specific travel metrics, exact-once task completion, depot route structure, incompatibility detection, and plotting.
+The test suite checks deterministic data generation, vehicle-specific travel metrics, exact-once task completion, depot route structure, incompatibility detection, 3D plotting, and Gantt-schedule plotting/validation.
 
 GitHub Actions runs the suite on Python 3.10, 3.11, and 3.12.
 
