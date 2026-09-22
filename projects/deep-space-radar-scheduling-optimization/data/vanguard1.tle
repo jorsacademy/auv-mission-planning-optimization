@@ -1,0 +1,5 @@
+# Historical Vanguard 1 TLE from the standard SGP4 verification literature.
+# It is intentionally old and is included only as a reproducible propagation example.
+VANGUARD 1
+1 00005U 58002B   00179.78495062  .00000023  00000-0  28098-4 0  4753
+2 00005  34.2682 331.5174 1849677 331.7664  19.3264 10.82419157413667
