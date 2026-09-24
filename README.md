@@ -1,4 +1,18 @@
-# AUV Mission Planning Optimization
+# Mission Planning Optimization
+
+<!-- portfolio-umbrella:start -->
+## Portfolio role
+
+This repository is the primary umbrella repository for this Jors Academy research area. Related projects have been consolidated under `projects/` so the methods, implementations, experiments, and case studies can be maintained and explored from one place.
+
+### Included projects
+
+- [`deep-space-radar-scheduling-optimization`](projects/deep-space-radar-scheduling-optimization/)
+- [`drone-delivery-optimization-pulp`](projects/drone-delivery-optimization-pulp/)
+- [`risk-aware-convoy-escort-allocation-milp`](projects/risk-aware-convoy-escort-allocation-milp/)
+
+Each consolidated project keeps its own files and a `SOURCE_REPOSITORY.md` provenance record. The snapshot preserves the source repository's default-branch files at consolidation time; repository-level history and metadata remain separate from the snapshot.
+<!-- portfolio-umbrella:end -->
 
 A mixed-integer linear programming (MILP) framework for planning missions for a heterogeneous fleet of Autonomous Underwater Vehicles (AUVs).
 
